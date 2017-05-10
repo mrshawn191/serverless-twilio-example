@@ -5,7 +5,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import RaisedButton from "material-ui/RaisedButton";
 import TextField from "material-ui/TextField";
-const AWSLambdaApiURL = "https://y1ye4cr14g.execute-api.eu-central-1.amazonaws.com/prod/aws-lambda-twilio-prod-sendText";
+const AWSLambdaApiURL = "https://dzsws1vyh4.execute-api.eu-central-1.amazonaws.com/test/myService-prod-hello";
 
 const styles = {
 	wrapper: {
@@ -25,7 +25,8 @@ class App extends Component {
 		
 		this.state = {
 			to: '',
-			message: ''
+			message: '',
+			result: ''
 		}
 	}
 	
@@ -51,6 +52,11 @@ class App extends Component {
 				message: payload.message
 			})
 			.then((response) => {
+				if (response.data.statusCode == 200) {
+					this.triggerSuccess();
+				} else if (response.data.statusCode == 400) {
+					this.triggerFailure(response.data.body);
+				}
 				console.log(response.data);
 			})
 			.catch((error) => {
@@ -59,7 +65,20 @@ class App extends Component {
 		
 	}
 	
+	triggerSuccess() {
+		this.setState({result: "Successfully sent SMS to " + this.state.to});
+		this.setState({to: ''});
+		this.setState({message: ''});
+	}
+	
+	triggerFailure(data) {
+		this.setState({result: "Failed to send SMS " + data});
+		this.setState({to: ''});
+		this.setState({message: ''});
+	}
+	
 	render() {
+		
 		return (
 			<MuiThemeProvider>
 				<div className="App">
@@ -73,6 +92,7 @@ class App extends Component {
 					<div style={styles.button}>
 						<RaisedButton primary={true} onClick={this.sendSmsMessage.bind(this)} label="Send SMS"/>
 					</div>
+					<h1>{this.state.result}</h1>
 				</div>
 			</MuiThemeProvider>
 		);
