@@ -20,6 +20,10 @@ Start the development server (changes will now update live in browser)
 
 To view your project, go to: [http://localhost:3000/](http://localhost:3000/)
 
+## Live Demo
+[Live demo on Heroku](https://frozen-beyond-34446.herokuapp.com/)
+
+
 ## Dependencies used
 - React
 - Axion (Http Library)
